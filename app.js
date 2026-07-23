@@ -13,9 +13,10 @@ const STATUS_LABEL = {
 const state = {
   textures: [],
   category: "block",
-  // Contributors land on the work that actually needs doing; "done" and
-  // "unreviewed" are opt-in so the grid isn't drowned in finished art.
-  statuses: new Set(["missing", "placeholder"]),
+  // Show everything. Filtering to just the unfinished work makes the mod look
+  // untextured and hides the finished art people are meant to match, so
+  // priority is expressed through sort order and badges instead.
+  statuses: new Set(STATUSES),
   search: "",
   material: "",
   variant: "",
@@ -125,7 +126,7 @@ function wireControls() {
   el("variantFilter").onchange = (e) => { state.variant = e.target.value; render(); };
   el("resetFilters").onclick = () => {
     state.search = state.material = state.variant = "";
-    state.statuses = new Set(["missing", "placeholder"]);
+    state.statuses = new Set(STATUSES);
     el("search").value = "";
     buildStatusChips();
     buildSelects();
@@ -175,8 +176,14 @@ function render() {
   grid.appendChild(frag);
 
   el("empty").hidden = shown.length > 0;
-  el("resultCount").textContent =
-    `${shown.length} of ${pool.length} ${state.category === "block" ? "block" : "item"} textures`;
+
+  const noun = state.category === "block" ? "block" : "item";
+  const needsArt = counts.missing + counts.placeholder;
+  const filtered = shown.length !== pool.length;
+  el("resultCount").textContent = filtered
+    ? `Showing ${shown.length} of ${pool.length} ${noun} textures`
+    : `${pool.length} ${noun} textures — ${needsArt} still need art, ` +
+      `${counts.unreviewed + counts.done} already drawn. Sorted with the gaps first.`;
 }
 
 function cardFor(t, small) {
