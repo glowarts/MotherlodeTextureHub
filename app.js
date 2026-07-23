@@ -34,7 +34,7 @@ const byKey = new Map();
 
 /* ---------- boot ------------------------------------------------------ */
 
-fetch("data/catalog.json?v=61bb909e")
+fetch("data/catalog.json?v=b35c3911")
   .then((r) => {
     if (!r.ok) throw new Error(r.status);
     return r.json();
@@ -333,6 +333,8 @@ function facesSection(g) {
           <span class="face-name">${escapeHtml(name)}</span>
           <span class="pill ${f.status}">${STATUS_LABEL[f.status]}</span>
           ${f.reason ? `<span class="face-reason">${escapeHtml(f.reason)}</span>` : ""}
+          ${f.redundantOf ? `<span class="face-reason warn">Unused duplicate of ${
+            escapeHtml(f.redundantOf.split("/").pop())} &mdash; nothing references this file.</span>` : ""}
           ${f.note ? `<span class="face-note">${escapeHtml(f.note)}</span>` : ""}
           <span class="face-actions">${download}
             <a class="face-link" href="${submitUrl(g, f)}" target="_blank" rel="noopener">Submit</a>
