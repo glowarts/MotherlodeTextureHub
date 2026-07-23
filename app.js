@@ -34,7 +34,7 @@ const byKey = new Map();
 
 /* ---------- boot ------------------------------------------------------ */
 
-fetch("data/catalog.json?v=6467b8df")
+fetch("data/catalog.json?v=b03305ee")
   .then((r) => {
     if (!r.ok) throw new Error(r.status);
     return r.json();
@@ -147,6 +147,20 @@ function wireControls() {
     e.preventDefault();
     el("guide").hidden = !el("guide").hidden;
   };
+
+  // Animations play by default for everyone; the choice to stop them is the
+  // viewer's, and it survives a reload.
+  const animBtn = el("animToggle");
+  const setAnim = (paused) => {
+    document.body.dataset.anim = paused ? "paused" : "playing";
+    animBtn.textContent = paused ? "Play animations" : "Pause animations";
+    animBtn.setAttribute("aria-pressed", String(paused));
+    try { localStorage.setItem("motherlode.anim", paused ? "paused" : "playing"); } catch (e) { }
+  };
+  let stored = null;
+  try { stored = localStorage.getItem("motherlode.anim"); } catch (e) { }
+  setAnim(stored === "paused");
+  animBtn.onclick = () => setAnim(document.body.dataset.anim !== "paused");
 
   el("modal").onclick = (e) => { if (e.target.dataset.close !== undefined) closeModal(); };
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });

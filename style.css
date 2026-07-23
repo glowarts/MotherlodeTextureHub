@@ -279,10 +279,12 @@ input[type="search"]:focus, select:focus { outline: 2px solid var(--gold); outli
 
 @keyframes filmstrip { to { transform: translateY(-100%); } }
 
-/* Dozens of looping sprites is a lot of motion for one page. */
-@media (prefers-reduced-motion: reduce) {
-  .filmstrip > img { animation: none; }
-}
+/* Deliberately NOT disabled under prefers-reduced-motion. Here the animation is
+   the artwork being reviewed, not decoration, and a lot of people turn Windows
+   animation effects off for performance - which reports as "reduce" and would
+   leave every animated texture frozen. The Pause button below is the control
+   instead, so it is a choice rather than a silent default. */
+body[data-anim="paused"] .filmstrip > img { animation-play-state: paused; }
 
 .warn { color: var(--missing); }
 .face-link { color: var(--gold); font-size: .72rem; text-decoration: none; }
