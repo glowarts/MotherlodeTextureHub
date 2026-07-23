@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motherlode — Texture Workshop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>Motherlode <span>Texture Workshop</span></h1>
+    <p class="tagline">Pick something that needs art. Draw it. Submit it.</p>
+  </div>
+  <a class="guide-link" href="#" id="guideToggle">Style guide &amp; rules</a>
+</header>
+
+<section class="guide" id="guide" hidden>
+  <div class="guide-inner">
+    <h2>Before you start</h2>
+    <ul>
+      <li><strong>16&times;16 pixels, PNG, transparency allowed.</strong> Anything else gets rejected automatically.</li>
+      <li><strong>Match the neighbours.</strong> Every texture page shows the rest of its material family and the same variant across other materials. Your texture has to sit next to those without looking out of place.</li>
+      <li><strong>Keep the palette tight.</strong> Most existing textures use 6&ndash;12 colours. Avoid gradients and anti-aliasing; this is pixel art, not a downscaled render.</li>
+      <li><strong>No AI-generated textures, no ripping from other mods or resource packs.</strong> Submissions must be your own work.</li>
+      <li>By submitting you agree your texture can ship in Motherlode under the mod's licence, credited to you.</li>
+    </ul>
+    <h2>Priority</h2>
+    <p>
+      <span class="pill missing">Missing</span> means the block exists in game with no texture at all &mdash; most valuable.
+      <span class="pill placeholder">Placeholder</span> means it currently uses a flat colour or a copy of another texture &mdash; also very valuable.
+      <span class="pill unreviewed">Unreviewed</span> has real art that hasn't been signed off.
+      <span class="pill done">Done</span> is finished &mdash; only redraw it if you think you can clearly beat it.
+    </p>
+  </div>
+</section>
+
+<nav class="tabs" id="tabs"></nav>
+
+<section class="controls">
+  <input type="search" id="search" placeholder="Search by name, material or variant…" autocomplete="off">
+  <div class="filters" id="statusFilters"></div>
+  <select id="materialFilter"><option value="">All materials</option></select>
+  <select id="variantFilter"><option value="">All variants</option></select>
+  <button id="resetFilters" class="ghost">Reset</button>
+</section>
+
+<p class="resultCount" id="resultCount"></p>
+
+<main id="grid" class="grid"></main>
+<p class="empty" id="empty" hidden>Nothing matches those filters.</p>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <article class="modal-body" id="modalBody"></article>
+</div>
+
+<footer>
+  <p>Generated from the Motherlode source tree. Textures shown are the current in-game art.</p>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

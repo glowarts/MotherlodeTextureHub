@@ -1,0 +1,69 @@
+name: Texture submission
+description: Submit a texture you have drawn for Motherlode.
+title: "[Texture] "
+labels: ["texture-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing art to Motherlode.
+
+        **Attach your PNG by dragging it into the "Your texture" box below.**
+        GitHub will host the file and I will see it inline when reviewing.
+
+  - type: input
+    id: texture_id
+    attributes:
+      label: Texture id
+      description: Pre-filled if you came from the workshop site. Looks like `block/adamantite_bricks`.
+      placeholder: block/adamantite_bricks
+    validations:
+      required: true
+
+  - type: input
+    id: current_status
+    attributes:
+      label: Current status
+      description: What the workshop site listed this as.
+      placeholder: Placeholder
+    validations:
+      required: false
+
+  - type: textarea
+    id: texture
+    attributes:
+      label: Your texture
+      description: |
+        Drag the PNG file into this box. Please also drop in a zoomed-in
+        screenshot if the 16x16 is hard to judge at actual size.
+      placeholder: Drag your 16x16 PNG here…
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Confirmations
+      options:
+        - label: The texture is 16x16 pixels, PNG format.
+          required: true
+        - label: I drew this myself. It is not AI-generated and not taken from another mod, resource pack or game.
+          required: true
+        - label: I agree it can ship in Motherlode under the mod's licence, credited to me.
+          required: true
+
+  - type: input
+    id: credit
+    attributes:
+      label: How should you be credited?
+      description: Name or handle for CREDITS.md. Leave blank to stay anonymous.
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else?
+      description: Palette choices, variants you also want to do, questions.
+    validations:
+      required: false
