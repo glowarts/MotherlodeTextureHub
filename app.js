@@ -34,7 +34,7 @@ const byKey = new Map();
 
 /* ---------- boot ------------------------------------------------------ */
 
-fetch("data/catalog.json?v=58256474")
+fetch("data/catalog.json?v=6467b8df")
   .then((r) => {
     if (!r.ok) throw new Error(r.status);
     return r.json();
@@ -204,9 +204,21 @@ function coverFace(g) {
 }
 
 function thumbFor(face, cls) {
-  return face && face.status !== "missing"
-    ? `<img class="${cls}" loading="lazy" alt="" src="textures/${face.id}.png">`
-    : `<div class="${cls} none" aria-hidden="true">?</div>`;
+  if (!face || face.status === "missing") {
+    return `<div class="${cls} none" aria-hidden="true">?</div>`;
+  }
+  const src = `textures/${face.id}.png`;
+  if (!(face.frames > 1)) {
+    return `<img class="${cls}" loading="lazy" alt="" src="${src}">`;
+  }
+  // An animated texture is a vertical filmstrip, so showing the PNG whole would
+  // squash every frame into one square. Clip to a single frame and step the
+  // strip upward instead: the image is `frames` tall, and translating it by its
+  // own height in `frames` steps lands exactly on each frame in turn.
+  return `<div class="${cls} filmstrip">
+      <img loading="lazy" alt="" src="${src}"
+           style="animation-duration:${face.duration}s;animation-timing-function:steps(${face.frames})">
+    </div>`;
 }
 
 function cardFor(g, small) {
@@ -215,8 +227,10 @@ function cardFor(g, small) {
   card.className = "card";
   card.title = g.key;
 
+  const anim = g.faces.find((f) => f.frames > 1);
   const faces = g.faces.length > 1
-    ? `<span class="faces">${g.faces.length} faces</span>` : "";
+    ? `<span class="faces">${g.faces.length} faces</span>`
+    : anim ? `<span class="faces">${anim.frames} frames</span>` : "";
 
   card.innerHTML =
     thumbFor(coverFace(g), "thumb") +
@@ -238,9 +252,16 @@ function openModal(key) {
   if (g.variant) rows.push(["Variant", titleCase(g.variant)]);
   rows.push(["Textures", g.faces.length === 1
     ? "1" : `${g.faces.length} faces, all needed`]);
+  const anim = g.faces.find((f) => f.frames > 1);
   if (cover && cover.size) {
-    rows.push(["Size", `${cover.size[0]}&times;${cover.size[1]}` +
-      (g.faces.some((f) => f.animated) ? " (animated)" : "")]);
+    // For a filmstrip the useful size is one frame, not the whole sheet.
+    const [w, h] = anim ? [anim.size[0], anim.size[0]] : cover.size;
+    rows.push(["Size", `${w}&times;${h}`]);
+  }
+  if (anim) {
+    rows.push(["Animation",
+      `${anim.frames} frames over ${anim.duration}s` +
+      (anim.hasMeta ? "" : ' <span class="warn">(no .mcmeta &mdash; will not animate in game)</span>')]);
   }
 
   const sameMaterial = g.material
@@ -288,7 +309,8 @@ function openModal(key) {
 function facesSection(g) {
   const single = g.faces.length === 1;
   const tiles = g.faces.map((f) => {
-    const name = f.face ? titleCase(f.face) : "Main";
+    const name = (f.face ? titleCase(f.face) : "Main") +
+      (f.frames > 1 ? ` · ${f.frames} frames` : "");
     const download = f.status === "missing" ? "" :
       `<a class="face-link" href="textures/${f.id}.png" download="${f.name.split("/").pop()}.png">Download</a>`;
     return `<figure class="face">

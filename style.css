@@ -257,6 +257,34 @@ input[type="search"]:focus, select:focus { outline: 2px solid var(--gold); outli
 .face-note { color: var(--gold); }
 
 .face-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .15rem; }
+
+/* ---- animated textures ------------------------------------------------ */
+
+/* A filmstrip is one frame wide and N frames tall. The wrapper clips to a
+   single frame; the image is N frames tall at that width, so translating it by
+   its own height in N steps lands exactly on each frame in turn.
+   Named .filmstrip, not .strip - that one is the related-textures carousel
+   further down, and it sets display:flex and overflow-x:auto. */
+.filmstrip { position: relative; overflow: hidden; }
+
+.filmstrip > img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  animation-name: filmstrip;
+  animation-iteration-count: infinite;
+}
+
+@keyframes filmstrip { to { transform: translateY(-100%); } }
+
+/* Dozens of looping sprites is a lot of motion for one page. */
+@media (prefers-reduced-motion: reduce) {
+  .filmstrip > img { animation: none; }
+}
+
+.warn { color: var(--missing); }
 .face-link { color: var(--gold); font-size: .72rem; text-decoration: none; }
 .face-link:hover { text-decoration: underline; }
 
