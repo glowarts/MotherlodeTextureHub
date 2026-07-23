@@ -34,7 +34,7 @@ const byKey = new Map();
 
 /* ---------- boot ------------------------------------------------------ */
 
-fetch("data/catalog.json?v=b03305ee")
+fetch("data/catalog.json?v=61bb909e")
   .then((r) => {
     if (!r.ok) throw new Error(r.status);
     return r.json();
@@ -231,7 +231,7 @@ function thumbFor(face, cls) {
   // own height in `frames` steps lands exactly on each frame in turn.
   return `<div class="${cls} filmstrip">
       <img loading="lazy" alt="" src="${src}"
-           style="animation-duration:${face.duration}s;animation-timing-function:steps(${face.frames})">
+           style="height:calc(${face.frames} * 100%);animation-duration:${face.duration}s;animation-timing-function:steps(${face.frames})">
     </div>`;
 }
 

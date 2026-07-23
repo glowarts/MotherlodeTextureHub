@@ -271,7 +271,13 @@ input[type="search"]:focus, select:focus { outline: 2px solid var(--gold); outli
   position: absolute;
   top: 0; left: 0;
   width: 100%;
-  height: auto;
+  /* Height is set inline to exactly (frames x 100%) of the wrapper.
+     Leaving it as `auto` derives the height from the intrinsic aspect ratio,
+     which only matches the wrapper when the wrapper is a whole number of
+     pixels. In the grid the cards are fractionally sized, so a 20-frame strip
+     came out 20.03 wrappers tall and every step drifted - the texture visibly
+     crept up and down. Pinning the height makes one step exactly one frame at
+     any container size. */
   image-rendering: pixelated;
   animation-name: filmstrip;
   animation-iteration-count: infinite;
