@@ -194,6 +194,56 @@ input[type="search"]:focus, select:focus { outline: 2px solid var(--gold); outli
 
 .empty { text-align: center; color: var(--muted); padding: 3rem 1rem; }
 
+/* Number of textures a block needs, when it is more than one. */
+.faces {
+  position: absolute;
+  top: .45rem; left: .45rem;
+  background: rgba(0,0,0,.66);
+  color: var(--text);
+  border-radius: 999px;
+  padding: .05rem .4rem;
+  font-size: .62rem;
+  letter-spacing: .02em;
+}
+
+/* ---- faces of one block ---------------------------------------------- */
+
+.faces-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: .6rem;
+}
+
+.face {
+  margin: 0;
+  display: flex;
+  gap: .6rem;
+  align-items: flex-start;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: .5rem;
+}
+
+.face-img {
+  width: 48px; height: 48px;
+  flex: none;
+  image-rendering: pixelated;
+  border-radius: 4px;
+  background: repeating-conic-gradient(#2a231c 0 25%, #221c16 0 50%) 0 0 / 12px 12px;
+}
+.face-img.none { display: grid; place-items: center; color: var(--missing); font-size: 1.4rem; }
+
+.face figcaption { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+.face-name { font-size: .8rem; }
+.face .pill { align-self: flex-start; font-size: .65rem; }
+.face-reason, .face-note { color: var(--muted); font-size: .7rem; line-height: 1.35; }
+.face-note { color: var(--gold); }
+
+.face-actions { display: flex; gap: .5rem; margin-top: .15rem; }
+.face-link { color: var(--gold); font-size: .72rem; text-decoration: none; }
+.face-link:hover { text-decoration: underline; }
+
 /* ---- pills ----------------------------------------------------------- */
 
 .pill {
