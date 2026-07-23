@@ -34,7 +34,7 @@ const byKey = new Map();
 
 /* ---------- boot ------------------------------------------------------ */
 
-fetch("data/catalog.json?v=1dc720e5")
+fetch("data/catalog.json?v=995ac2bf")
   .then((r) => {
     if (!r.ok) throw new Error(r.status);
     return r.json();
