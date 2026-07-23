@@ -19,7 +19,20 @@ materials — match those.
 ## For the maintainer
 
 This whole folder is generated. Do not hand-edit `data/`, `textures/`,
-`index.html`, `app.js` or `style.css` — regenerate instead, from the mod repo:
+`index.html`, `app.js` or `style.css` — regenerate instead.
+
+**After changing any texture in the mod, run this from the mod repo:**
+
+```
+.\tools\texture_site\publish.ps1
+```
+
+That regenerates the catalog, copies the PNGs, commits and pushes. Pages
+redeploys within a minute. Asset URLs carry a content hash, so returning
+visitors pick up the new build without hard-refreshing.
+
+Add `-DryRun` to see what would change without publishing. The underlying
+generator can also be run on its own:
 
 ```
 python tools/texture_site/build_site.py --out ../MotherlodeTextureHub
