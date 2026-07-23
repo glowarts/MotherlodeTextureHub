@@ -54,6 +54,9 @@ heuristics think it looks fine — useful for art that is drawn but wrong.
   "placeholder": [
     "block/cryptstone"
   ],
+  "removed": [
+    "cobblestone"
+  ],
   "notes": {
     "block/cryptstone": "Drawn, but too saturated next to the rest of the family."
   }
@@ -61,6 +64,17 @@ heuristics think it looks fine — useful for art that is drawn but wrong.
 ```
 
 `notes` shows up on the texture's page, so use it to steer contributors.
+
+`removed` drops a block from the catalog entirely. You need it when a block is
+deleted from the mod but its generated model data is still around — the model
+still references a texture that will never exist, so the block would otherwise
+sit in the list forever as `missing` and someone would draw art for it. Entries
+match a whole family (`cobblestone` covers `cobblestone_bricks`, `cobblestone_slab`
+and so on) or a single id (`block/cobblestone_slab`).
+
+The generator prints a NOTE listing any family whose textures are *all* missing,
+since that usually means a deleted block rather than a real gap. Check those
+against the mod source and add the dead ones here.
 
 ### Accepting a submission
 
