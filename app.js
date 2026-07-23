@@ -27,7 +27,7 @@ const byId = new Map();
 
 /* ---------- boot ------------------------------------------------------ */
 
-fetch("data/catalog.json")
+fetch("data/catalog.json?v=2604c01e")
   .then((r) => {
     if (!r.ok) throw new Error(r.status);
     return r.json();
