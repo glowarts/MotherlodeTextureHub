@@ -24,6 +24,9 @@ const state = {
   search: "",
   material: "",
   variant: "",
+  // "priority" surfaces the work; "name" keeps a family together even when some
+  // of its members are finished and others are not.
+  sort: "priority",
 };
 
 const el = (id) => document.getElementById(id);
@@ -31,7 +34,7 @@ const byKey = new Map();
 
 /* ---------- boot ------------------------------------------------------ */
 
-fetch("data/catalog.json?v=98cef52f")
+fetch("data/catalog.json?v=1dc720e5")
   .then((r) => {
     if (!r.ok) throw new Error(r.status);
     return r.json();
@@ -128,10 +131,13 @@ function wireControls() {
   };
   el("materialFilter").onchange = (e) => { state.material = e.target.value; render(); };
   el("variantFilter").onchange = (e) => { state.variant = e.target.value; render(); };
+  el("sortBy").onchange = (e) => { state.sort = e.target.value; render(); };
   el("resetFilters").onclick = () => {
     state.search = state.material = state.variant = "";
+    state.sort = "priority";
     state.statuses = new Set(STATUSES);
     el("search").value = "";
+    el("sortBy").value = "priority";
     buildStatusChips();
     buildSelects();
     render();
@@ -169,8 +175,9 @@ function render() {
   });
 
   const shown = state.groups.filter(matches).sort(
-    (a, b) => STATUSES.indexOf(a.status) - STATUSES.indexOf(b.status) ||
-              a.name.localeCompare(b.name)
+    (a, b) => (state.sort === "priority"
+      ? STATUSES.indexOf(a.status) - STATUSES.indexOf(b.status) : 0) ||
+      a.name.localeCompare(b.name)
   );
 
   const grid = el("grid");
@@ -183,10 +190,12 @@ function render() {
 
   const noun = state.category === "block" ? "block" : "item";
   const needsArt = counts.missing + counts.placeholder;
+  const order = state.sort === "priority"
+    ? "Sorted with the gaps first." : "Sorted by name, so families stay together.";
   el("resultCount").textContent = shown.length !== pool.length
-    ? `Showing ${shown.length} of ${pool.length} ${noun}s`
+    ? `Showing ${shown.length} of ${pool.length} ${noun}s. ${order}`
     : `${pool.length} ${noun}s — ${needsArt} still need art, ` +
-      `${counts.unreviewed + counts.done} already drawn. Sorted with the gaps first.`;
+      `${counts.unreviewed + counts.done} already drawn. ${order}`;
 }
 
 /** The face that best represents the block on its card. */

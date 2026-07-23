@@ -223,6 +223,10 @@ input[type="search"]:focus, select:focus { outline: 2px solid var(--gold); outli
   border: 1px solid var(--line);
   border-radius: 6px;
   padding: .5rem;
+  /* A flex item defaults to min-width:auto, so a long word in the caption can
+     push the tile wider than its grid track and spill past the border. */
+  min-width: 0;
+  overflow: hidden;
 }
 
 .face-img {
@@ -234,13 +238,25 @@ input[type="search"]:focus, select:focus { outline: 2px solid var(--gold); outli
 }
 .face-img.none { display: grid; place-items: center; color: var(--missing); font-size: 1.4rem; }
 
-.face figcaption { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+.face figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  min-width: 0;
+  /* "pixel-for-pixel" has no break opportunity, so normal wrapping overflows. */
+  overflow-wrap: anywhere;
+}
 .face-name { font-size: .8rem; }
-.face .pill { align-self: flex-start; font-size: .65rem; }
+.face .pill {
+  align-self: flex-start;
+  font-size: .65rem;
+  max-width: 100%;
+  white-space: normal;
+}
 .face-reason, .face-note { color: var(--muted); font-size: .7rem; line-height: 1.35; }
 .face-note { color: var(--gold); }
 
-.face-actions { display: flex; gap: .5rem; margin-top: .15rem; }
+.face-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .15rem; }
 .face-link { color: var(--gold); font-size: .72rem; text-decoration: none; }
 .face-link:hover { text-decoration: underline; }
 
