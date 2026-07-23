@@ -37,21 +37,28 @@ The generator guesses status automatically:
 | Status | How it is decided |
 | --- | --- |
 | `missing` | A model references the texture but no PNG exists. |
-| `placeholder` | The PNG is byte-identical to 2+ others, or is a flat fill of ≤2 colours. |
+| `placeholder` | Its pixel layout is shared with 4+ other textures, or it is a flat fill of ≤2 colours. |
 | `unreviewed` | A real-looking PNG exists but you haven't signed it off. |
 | `done` | You listed it under `done`. |
 
-Only `done` needs manual work, and only for textures you are happy with.
-Anything you list under `placeholder` is forced to that status even if the
-heuristics think it looks fine — useful for art that is drawn but wrong.
+Placeholders are found by **structure, not colour**. Each pixel is replaced by
+the index of its colour in order of first appearance, and that grid is hashed —
+so a green checkerboard and a blue one produce the same fingerprint, and both
+get caught. Recolouring a stock pattern does not disguise it. Real art never
+collides this way; two hand-drawn tiles do not share a pixel-exact layout.
+
+That catches the two stock patterns already in the mod (a flat fill and a
+bordered 4×4 checkerboard). A placeholder drawn from scratch, one-of-a-kind,
+will *not* be caught — flag those by hand under `placeholder`.
 
 ```json
 {
   "done": [
-    "block/adamantite_ore",
+    "adamantite",
     "item/amber"
   ],
   "placeholder": [
+    "adamantite_ore",
     "block/cryptstone"
   ],
   "removed": [
@@ -63,7 +70,17 @@ heuristics think it looks fine — useful for art that is drawn but wrong.
 }
 ```
 
-`notes` shows up on the texture's page, so use it to steer contributors.
+Every list matches either a **single id** (`block/cryptstone`) or a whole
+**family** (`adamantite` covers `adamantite_bricks`, `adamantite_slab` and the
+other thirteen). Families keep this file short — flagging a material by hand
+would otherwise mean typing out 35 ids.
+
+`placeholder` wins over `done`, so the example above marks all fifteen
+adamantite textures finished *except* `adamantite_ore`, which stays flagged.
+That is the usual shape: sign off a material, then pull back the one or two you
+are not happy with.
+
+`notes` shows up on the texture's page, so use it to say what is wrong.
 
 `removed` drops a block from the catalog entirely. You need it when a block is
 deleted from the mod but its generated model data is still around — the model
